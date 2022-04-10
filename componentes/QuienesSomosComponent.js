@@ -15,6 +15,7 @@ function RenderItem(props) {
             <ListItem bottomDivider>
                 <Avatar source={require('./imagenes/40Años.png')} />
                 <ListItem.Content>
+                    <ListItem.Title>{item.nombre}</ListItem.Title>
                     <ListItem.Subtitle>{item.descripcion}</ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem>
