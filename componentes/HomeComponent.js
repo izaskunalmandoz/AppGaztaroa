@@ -5,6 +5,7 @@ import { EXCURSIONES } from '../comun/excursiones';
 import { CABECERAS } from '../comun/cabeceras';
 import { ACTIVIDADES } from '../comun/actividades';
 import { ImageBackground } from 'react-native-web';
+import { baseUrl } from '../comun/comun';
 
 function RenderItem(props) {
 
@@ -13,9 +14,9 @@ function RenderItem(props) {
     if (item != null) {
         return (
             <Card>
-                <Card.Image source={require('./imagenes/40Años.png')} >
-                    <View style={{ position: 'absolute', left: 0, right: 0, alignItems: 'center' }}>
-                        <Card.Title style={{ color: 'chocolate' }}>{item.nombre}</Card.Title>
+                <Card.Image source={{ uri: baseUrl + item.imagen }} >
+                    <View style={{ position: 'relative', left: 0, right: 0, justifyContent: 'center',  alignItems: 'center', flex: 1 }}>
+                        <Card.Title style={{ color: 'chocolate', fontSize: 25 }}>{item.nombre}</Card.Title>
                     </View>
                 </Card.Image>
                 <Text style={{ margin: 20 }}>

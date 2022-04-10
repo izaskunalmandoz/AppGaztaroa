@@ -3,17 +3,20 @@ import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
+import { baseUrl } from '../comun/comun';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function RenderExcursion(props) {
 
   const excursion = props.excursion;
-
   if (excursion != null) {
     return (
       <Card>
-        <Card.Title>{excursion.nombre}</Card.Title>
-        <Card.Divider />
-        <Card.Image source={require('./imagenes/40Años.png')}></Card.Image>
+        <Card.Image source={{ uri: baseUrl + excursion.imagen }}>
+        <View style={{ position: 'relative', left: 0, right: 0, justifyContent: 'center',  alignItems: 'center', flex: 1 }}>
+                        <Card.Title style={{ color: 'white', fontSize: 25 }}>{excursion.nombre}</Card.Title>
+                    </View>
+        </Card.Image>
         <Text style={{ margin: 20 }}>
           {excursion.descripcion}
         </Text>
@@ -52,11 +55,13 @@ function RenderComentario(props) {
     <Card>
       <Card.Title>Comentarios</Card.Title>
       <Card.Divider />
-      <FlatList
-        data={comentarios}
-        renderItem={renderCommentarioItem}
-        keyExtractor={item => item.id.toString()}
-      />
+      <SafeAreaView>
+        <FlatList
+          data={comentarios}
+          renderItem={renderCommentarioItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      </SafeAreaView>
     </Card>
   );
 }

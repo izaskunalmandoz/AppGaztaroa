@@ -5,6 +5,8 @@ import { EXCURSIONES } from '../comun/excursiones';
 import { CABECERAS } from '../comun/cabeceras';
 import { ACTIVIDADES } from '../comun/actividades';
 import { FlatList } from 'react-native';
+import { baseUrl } from '../comun/comun';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function RenderItem(props) {
 
@@ -13,7 +15,7 @@ function RenderItem(props) {
     if (item != null) {
         return (
             <ListItem bottomDivider>
-                <Avatar source={require('./imagenes/40Años.png')} />
+                <Avatar source={{ uri: baseUrl + item.imagen }} />
                 <ListItem.Content>
                     <ListItem.Title>{item.nombre}</ListItem.Title>
                     <ListItem.Subtitle>{item.descripcion}</ListItem.Subtitle>
@@ -59,11 +61,13 @@ class QuienesSomos extends Component {
                 <Card>
                     <Card.Title>Actividades y recursos</Card.Title>
                     <Card.Divider />
-                    <FlatList
-                        data={this.state.actividades}
-                        renderItem={RenderItem}
-                        keyExtractor={item => item.id.toString()}
-                    />
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.actividades}
+                            renderItem={RenderItem}
+                            keyExtractor={item => item.id.toString()}
+                        />
+                    </SafeAreaView>
                 </Card>
 
 
