@@ -13,9 +13,8 @@ function RenderItem(props) {
     if (item != null) {
         return (
             <Card>
-
                 <Card.Image source={require('./imagenes/40Años.png')} >
-                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center' }}>
+                    <View style={{ position: 'absolute', left: 0, right: 0, alignItems: 'center' }}>
                         <Card.Title style={{ color: 'chocolate' }}>{item.nombre}</Card.Title>
                     </View>
                 </Card.Image>
