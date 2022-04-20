@@ -5,6 +5,14 @@ import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
 import { baseUrl } from '../comun/comun';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+  return {
+    excursiones: state.excursiones,
+    comentarios: state.comentarios
+  }
+}
 
 function RenderExcursion(props) {
 
@@ -13,9 +21,9 @@ function RenderExcursion(props) {
     return (
       <Card>
         <Card.Image source={{ uri: baseUrl + excursion.imagen }}>
-        <View style={{ position: 'relative', left: 0, right: 0, justifyContent: 'center',  alignItems: 'center', flex: 1 }}>
-                        <Card.Title style={{ color: 'white', fontSize: 25 }}>{excursion.nombre}</Card.Title>
-                    </View>
+          <View style={{ position: 'relative', left: 0, right: 0, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+            <Card.Title style={{ color: 'white', fontSize: 25 }}>{excursion.nombre}</Card.Title>
+          </View>
         </Card.Image>
         <Text style={{ margin: 20 }}>
           {excursion.descripcion}
@@ -97,4 +105,5 @@ class DetalleExcursion extends Component {
   }
 }
 
-export default DetalleExcursion;
+// export default DetalleExcursion;
+export default connect(mapStateToProps)(DetalleExcursion);
