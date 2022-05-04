@@ -1,22 +1,36 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Alert, StyleSheet, Pressable } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
 import { baseUrl } from '../comun/comun';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
+import { postFavorito } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return {
     excursiones: state.excursiones,
-    comentarios: state.comentarios
+    comentarios: state.comentarios,
+    favoritos: state.favoritos
   }
 }
+const mapDispatchToProps = dispatch => ({
+  postFavorito: (excursionId) => dispatch(postFavorito(excursionId))
+})
 
 function RenderExcursion(props) {
 
   const excursion = props.excursion;
+  const favoritos = props.favoritos;
+  let isFavorito = false;
+
+  for (let i = 0; i < favoritos.length; i++) {
+    if (favoritos[i] === excursion.id) {
+      isFavorito = true;
+    }
+  }
+
   if (excursion != null) {
     return (
       <Card>
@@ -31,10 +45,10 @@ function RenderExcursion(props) {
         <Icon
           raised
           reverse
-          name={props.favorita ? 'heart' : 'heart-o'}
+          name={isFavorito ? 'heart' : 'heart-o'}
           type='font-awesome'
           color='#f50'
-          onPress={() => props.favorita ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
+          onPress={() => isFavorito ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
         />
       </Card>
     );
@@ -42,6 +56,20 @@ function RenderExcursion(props) {
   else {
     return (<View></View>);
   }
+}
+
+//Virtualized LIst para sustituir a ScrollView
+const VirtualizedList = ({ children }) => {
+  return (
+    <FlatList
+      data={[]}
+      keyExtractor={() => "key"}
+      renderItem={null}
+      ListHeaderComponent={
+        <>{children}</>
+      }
+    />
+  )
 }
 
 function RenderComentario(props) {
@@ -75,35 +103,35 @@ function RenderComentario(props) {
 }
 
 class DetalleExcursion extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      excursiones: EXCURSIONES,
-      comentarios: COMENTARIOS,
-      favoritos: []
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     excursiones: EXCURSIONES,
+  //     comentarios: COMENTARIOS,
+  //     favoritos: []
+  //   };
+  // }
 
   marcarFavorito(excursionId) {
-    this.setState({ favoritos: this.state.favoritos.concat(excursionId) });
+    this.props.postFavorito(excursionId);
   }
 
   render() {
     const { excursionId } = this.props.route.params;
     return (
-      <ScrollView>
+      <VirtualizedList>
         <RenderExcursion
-          excursion={this.state.excursiones[+excursionId]}
-          favorita={this.state.favoritos.some(el => el === excursionId)}
+          excursion={this.props.excursiones.excursiones[+excursionId]}
+          favoritos={this.props.favoritos.favoritos}
           onPress={() => this.marcarFavorito(excursionId)}
         />
         <RenderComentario
-          comentarios={this.state.comentarios.filter((comentario) => comentario.excursionId === excursionId)}
+          comentarios={this.props.comentarios.comentarios.filter((comentario) => comentario.excursionId === excursionId)}
         />
-      </ScrollView>
+      </VirtualizedList>
     );
   }
 }
 
 // export default DetalleExcursion;
-export default connect(mapStateToProps)(DetalleExcursion);
+export default connect(mapStateToProps, mapDispatchToProps)(DetalleExcursion);

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { ListItem, Avatar } from 'react-native-elements';
-import { SafeAreaView, FlatList } from 'react-native';
+import { SafeAreaView, FlatList, View } from 'react-native';
 // import { EXCURSIONES } from '../comun/excursiones';
 import { baseUrl } from '../comun/comun';
 import { connect } from 'react-redux';
+import { IndicadorActividad } from './IndicadorActividadComponent';
 
 const mapStateToProps = state => {
     return {
@@ -38,13 +39,27 @@ class Calendario extends Component {
             );
         };
 
-        return (
-            <FlatList
-                data={this.props.excursiones.excursiones}
-                renderItem={renderCalendarioItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        );
+        if (this.props.excursiones.isLoading == false) {
+            return (
+                <SafeAreaView>
+                    <FlatList
+                        data={this.props.excursiones.excursiones}
+                        renderItem={renderCalendarioItem}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </SafeAreaView>
+            );
+        } else if (this.props.excursiones.errMess) {
+            return (
+                <View>
+                    <Text>{this.props.excursiones.errMess}</Text>
+                </View>
+            )
+        } else {
+            return (
+                <IndicadorActividad />
+            )
+        }
     }
 }
 

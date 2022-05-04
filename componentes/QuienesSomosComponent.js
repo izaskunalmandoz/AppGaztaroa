@@ -8,6 +8,7 @@ import { FlatList } from 'react-native';
 import { baseUrl } from '../comun/comun';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
+import { IndicadorActividad } from './IndicadorActividadComponent';
 
 const mapStateToProps = state => {
     return {
@@ -33,6 +34,20 @@ function RenderItem(props) {
     else {
         return (<View></View>);
     }
+}
+
+//Virtualized LIst para sustituir a ScrollView
+const VirtualizedList = ({ children }) => {
+    return (
+        <FlatList
+            data={[]}
+            keyExtractor={() => "key"}
+            renderItem={null}
+            ListHeaderComponent={
+                <>{children}</>
+            }
+        />
+    )
 }
 
 
@@ -62,25 +77,44 @@ class QuienesSomos extends Component {
 
     render() {
 
-        return (
-            <ScrollView>
-                <Historia />
-                <Card>
-                    <Card.Title>Actividades y recursos</Card.Title>
-                    <Card.Divider />
-                    <SafeAreaView>
-                        <FlatList
-                            // data={this.state.actividades}
-                            data={this.props.actividades.actividades}
-                            renderItem={RenderItem}
-                            keyExtractor={item => item.id.toString()}
-                        />
-                    </SafeAreaView>
-                </Card>
+        if (this.props.actividades.isLoading) {
+            return (
+                <ScrollView>
+                    <Historia />
+                    <Card>
+                        <Card.Title>Actividades y recursos</Card.Title>
+                        <Card.Divider />
+                        <IndicadorActividad />
+                    </Card>
+                </ScrollView>
+            );
+        } else if (this.props.actividades.errMess) {
+            return (
+                <View>
+                    <Text>{this.props.actividades.errMess}</Text>
+                </View>
+            )
+        } else {
+            return (
+                <VirtualizedList>
+                    <Historia />
+                    <Card>
+                        <Card.Title>Actividades y recursos</Card.Title>
+                        <Card.Divider />
+                        <SafeAreaView>
+                            <FlatList
+                                // data={this.state.actividades}
+                                data={this.props.actividades.actividades}
+                                renderItem={RenderItem}
+                                keyExtractor={item => item.id.toString()}
+                            />
+                        </SafeAreaView>
+                    </Card>
 
 
-            </ScrollView>
-        );
+                </VirtualizedList>
+            );
+        }
     }
 }
 
