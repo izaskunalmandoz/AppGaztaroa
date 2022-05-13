@@ -6,7 +6,9 @@ import { COMENTARIOS } from '../comun/comentarios';
 import { baseUrl } from '../comun/comun';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
-import { postFavorito } from '../redux/ActionCreators';
+import { postFavorito, postComentario } from '../redux/ActionCreators';
+import { render } from 'react-dom';
+import ModalComentarios from './ModalComentsComponent';
 
 const mapStateToProps = state => {
   return {
@@ -16,7 +18,8 @@ const mapStateToProps = state => {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  postFavorito: (excursionId) => dispatch(postFavorito(excursionId))
+  postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
+  postComentario: (excursionId, valoracion, autor, comentario) => dispatch(postComentario(excursionId, valoracion, autor, comentario))
 })
 
 function RenderExcursion(props) {
@@ -42,14 +45,17 @@ function RenderExcursion(props) {
         <Text style={{ margin: 20 }}>
           {excursion.descripcion}
         </Text>
-        <Icon
-          raised
-          reverse
-          name={isFavorito ? 'heart' : 'heart-o'}
-          type='font-awesome'
-          color='#f50'
-          onPress={() => isFavorito ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
-        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Icon
+            raised
+            reverse
+            name={isFavorito ? 'heart' : 'heart-o'}
+            type='font-awesome'
+            color='#f50'
+            onPress={() => isFavorito ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
+          />
+          <ModalComentarios id={excursion.id} />
+        </View>
       </Card>
     );
   }

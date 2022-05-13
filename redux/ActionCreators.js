@@ -3,22 +3,22 @@ import { baseUrl } from '../comun/comun';
 
 export const fetchComentarios = () => (dispatch) => {
     return fetch(baseUrl + 'comentarios')
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-      })
-    .then(response => response.json())
-    .then(comentarios => dispatch(addComentarios(comentarios)))
-    .catch(error => dispatch(comentariosFailed(error.message)));
+        .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(comentarios => dispatch(addComentarios(comentarios)))
+        .catch(error => dispatch(comentariosFailed(error.message)));
 };
 
 export const comentariosFailed = (errmess) => ({
@@ -31,27 +31,51 @@ export const addComentarios = (comentarios) => ({
     payload: comentarios
 });
 
+export const postComentario = (excursionId, valoracion, autor, comentario) => (dispatch) => {
+    //type: ActionTypes.POST_COMENTARIO,
+
+    const d = new Date();
+    let dia = d.toISOString();
+    console.log('dia: ' + dia);
+
+    setTimeout(() => {
+        dispatch(addComentario(excursionId, valoracion, autor, comentario, dia));
+    }, 2000);
+};
+
+export const addComentario = (excursionId, valoracion, autor, comentario, dia) => ({
+    type: ActionTypes.ADD_COMENTARIO,
+    payload: {
+        excursionId: excursionId, 
+        valoracion: valoracion, 
+        autor: autor, 
+        comentario: comentario, 
+        dia: dia
+    }
+});
+
+
 export const fetchExcursiones = () => (dispatch) => {
 
     dispatch(excursionesLoading());
 
     return fetch(baseUrl + 'excursiones')
-    .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error('Error ' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
-      error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-      })
-    .then(response => response.json())
-    .then(excursiones => dispatch(addExcursiones(excursiones)))
-    .catch(error => dispatch(excursionesFailed(error.message)));
+        .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(excursiones => dispatch(addExcursiones(excursiones)))
+        .catch(error => dispatch(excursionesFailed(error.message)));
 };
 
 export const excursionesLoading = () => ({
@@ -69,26 +93,26 @@ export const addExcursiones = (excursiones) => ({
 });
 
 export const fetchCabeceras = () => (dispatch) => {
-    
+
     dispatch(cabecerasLoading());
 
     return fetch(baseUrl + 'cabeceras')
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
+        .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
         },
-        error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-        })
-    .then(response => response.json())
-    .then(cabeceras => dispatch(addCabeceras(cabeceras)))
-    .catch(error => dispatch(cabecerasFailed(error.message)));
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(cabeceras => dispatch(addCabeceras(cabeceras)))
+        .catch(error => dispatch(cabecerasFailed(error.message)));
 };
 
 export const cabecerasLoading = () => ({
@@ -106,26 +130,26 @@ export const addCabeceras = (cabeceras) => ({
 });
 
 export const fetchActividades = () => (dispatch) => {
-    
+
     dispatch(actividadesLoading());
 
     return fetch(baseUrl + 'actividades')
-    .then(response => {
-        if (response.ok) {
-            return response;
-        } else {
-            var error = new Error('Error ' + response.status + ': ' + response.statusText);
-            error.response = response;
-            throw error;
-        }
+        .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
         },
-        error => {
-            var errmess = new Error(error.message);
-            throw errmess;
-        })
-    .then(response => response.json())
-    .then(actividades => dispatch(addActividades(actividades)))
-    .catch(error => dispatch(actividadesFailed(error.message)));
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
+        .then(response => response.json())
+        .then(actividades => dispatch(addActividades(actividades)))
+        .catch(error => dispatch(actividadesFailed(error.message)));
 };
 
 export const actividadesLoading = () => ({
@@ -142,7 +166,7 @@ export const addActividades = (actividades) => ({
     payload: actividades
 });
 
-export const postFavorito = (excursionId)  => (dispatch) => {
+export const postFavorito = (excursionId) => (dispatch) => {
     setTimeout(() => {
         dispatch(addFavorito(excursionId));
     }, 2000);
